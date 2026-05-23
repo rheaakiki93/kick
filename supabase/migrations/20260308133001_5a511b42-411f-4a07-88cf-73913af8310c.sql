@@ -1,0 +1,1 @@
+ALTER TABLE public.survey_responses ADD COLUMN ginger_spice_rating integer, ADD COLUMN knows_benefits boolean;
