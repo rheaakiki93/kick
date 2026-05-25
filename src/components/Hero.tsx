@@ -1,25 +1,63 @@
 import { motion } from "framer-motion";
-import heroBottle from "@/assets/hero-bottle.png";
+import heroBottle from "@/assets/hero-bottle.png"; // used as video poster & mobile fallback
+import kickLogoCropped from "@/assets/kick-logo-cropped.png";
 
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0 bg-secondary" />
+    <section className="relative min-h-[calc(100vh-96px)] mt-[96px] flex items-center justify-center overflow-hidden">
 
-      <motion.div
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[380px] lg:w-[460px] h-[300px] md:h-[380px] lg:h-[460px] bg-primary/40 rounded-full blur-3xl"
-        animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.5, 0.3] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-      />
+      {/* Video background – desktop only */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover hidden md:block"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        poster={heroBottle}
+      >
+        <source src="/hero.webm" type="video/webm" />
+        <source src="/hero.mp4" type="video/mp4" />
+      </video>
 
-      <motion.img
+      {/* Poster image – mobile only */}
+      <img
         src={heroBottle}
-        alt="Kick immunity shot bottle"
-        className="relative w-[220px] md:w-[280px] lg:w-[340px] drop-shadow-2xl z-10"
-        animate={{ y: [0, -18, 0], rotate: [-15, 5, -15] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        alt="Kick wellness shot"
+        className="absolute inset-0 w-full h-full object-cover block md:hidden"
       />
 
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent pointer-events-none" />
+
+      {/* Centered tagline */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 0.5 }}
+        className="relative z-10 text-center px-6"
+        style={{ fontFamily: 'Garet, sans-serif' }}
+      >
+        <p className="text-yellow-400 text-lg md:text-2xl lg:text-3xl tracking-normal drop-shadow-lg font-normal mb-2">
+          piccolo formato,
+        </p>
+        <div className="flex items-center justify-center gap-0 flex-nowrap">
+          <span
+            className="text-yellow-400 text-4xl md:text-6xl lg:text-7xl font-bold drop-shadow-lg leading-none"
+            style={{ fontFamily: "'Fraunces', serif" }}
+          >
+            grande
+          </span>
+          <img
+            src={kickLogoCropped}
+            alt="Kick"
+            className="h-10 md:h-16 lg:h-20 w-auto drop-shadow-lg"
+            style={{ filter: 'brightness(0) saturate(100%) invert(87%) sepia(68%) saturate(788%) hue-rotate(327deg) brightness(101%)' }}
+          />
+        </div>
+      </motion.div>
+
+      {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -35,4 +73,5 @@ const Hero = () => {
     </section>
   );
 };
+
 export default Hero;
