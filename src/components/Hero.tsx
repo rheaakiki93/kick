@@ -14,7 +14,7 @@ const Hero = () => {
         loop
         playsInline
         preload="metadata"
-        poster={heroBottle}
+        poster="/hero-poster.jpg"
         style={{ filter: 'brightness(0.85) contrast(1.15) saturate(1.3)' }}
       >
         <source src="/hero.mp4" type="video/mp4" />
