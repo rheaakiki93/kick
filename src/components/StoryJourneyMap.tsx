@@ -27,8 +27,7 @@ const CITIES = [
     chapter: "The Beginning",
     story:
       "Born and raised in Lebanon, surrounded by bold Mediterranean flavours and a culture that lives fully. It's where my relationship with real, vibrant food began — and where the seeds of Kick were planted long before I knew it.",
-    // 👉 Replace null with your photo path, e.g. image: "/images/beirut.jpg"
-    image: null as string | null,
+    image: "/images/beirut.jpg",
     placeholderGradient: "linear-gradient(135deg, #c8864a 0%, #a0522d 100%)",
     placeholderLabel: "📍 Beirut, Lebanon",
   },
