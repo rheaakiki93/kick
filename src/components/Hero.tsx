@@ -17,7 +17,6 @@ const Hero = () => {
         poster={heroBottle}
         style={{ filter: 'brightness(0.85) contrast(1.15) saturate(1.3)' }}
       >
-        <source src="/hero.webm" type="video/webm" />
         <source src="/hero.mp4" type="video/mp4" />
       </video>
 
