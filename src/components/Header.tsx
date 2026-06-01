@@ -1,6 +1,6 @@
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { Instagram } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import kickLogo from "@/assets/kick-logo.png";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -9,6 +9,28 @@ const Header = () => {
   const [hidden, setHidden] = useState(false);
   const { scrollY } = useScroll();
   const { language, setLanguage, t } = useLanguage();
+
+  // Typewriter logic
+  const phrases = [t("typewriter.energy"), t("typewriter.immunity"), t("typewriter.gut")];
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [displayText, setDisplayText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentPhrase = phrases[phraseIndex];
+    let timeout: ReturnType<typeof setTimeout>;
+    if (!isDeleting && displayText === currentPhrase) {
+      timeout = setTimeout(() => setIsDeleting(true), 1800);
+    } else if (isDeleting && displayText === "") {
+      setIsDeleting(false);
+      setPhraseIndex((prev) => (prev + 1) % phrases.length);
+    } else if (isDeleting) {
+      timeout = setTimeout(() => setDisplayText((prev) => prev.slice(0, -1)), 50);
+    } else {
+      timeout = setTimeout(() => setDisplayText(currentPhrase.slice(0, displayText.length + 1)), 80);
+    }
+    return () => clearTimeout(timeout);
+  }, [displayText, isDeleting, phraseIndex]);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -39,9 +61,10 @@ const Header = () => {
         opacity: hidden ? 0 : 1 
       }}
       transition={{ duration: 0.3 }}
-      className="fixed top-0 left-0 right-0 z-50"
+      className="fixed top-0 left-0 right-0 z-50 border-0"
+      style={{ backgroundColor: 'hsl(25, 95%, 55%)' }}
     >
-      <div className="container mx-auto px-6 flex items-center justify-between py-6">
+      <div className="container mx-auto px-6 flex items-center justify-between pt-6 pb-1">
         <a href="/" className="block h-10 overflow-hidden">
           <img src={kickLogo} alt="kick" className="h-28 w-auto -mt-9 brightness-0 invert" />
         </a>
@@ -90,6 +113,18 @@ const Header = () => {
             </span>
           </div>
         </div>
+      </div>
+
+      {/* Typewriter tagline — inside the orange bar */}
+      <div className="container mx-auto px-6 pb-2">
+        <span className="text-sm font-sans font-medium text-white tracking-[0.2em] uppercase h-5 inline-flex items-center mx-[15px]">
+          {displayText}
+          <motion.span
+            animate={{ opacity: [1, 0] }}
+            transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
+            className="inline-block w-[1px] h-[0.9em] bg-white ml-0.5"
+          />
+        </span>
       </div>
     </motion.header>
   );
