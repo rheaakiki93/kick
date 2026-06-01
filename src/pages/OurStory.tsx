@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import kickBottleGinger from "@/assets/kick-bottle-ginger.png";
 import illustrationDrinking from "@/assets/illustration-drinking.png";
 import { useLanguage } from "@/contexts/LanguageContext";
+import StoryJourneyMap from "@/components/StoryJourneyMap";
 
 const OurStory = () => {
   const { t } = useLanguage();
@@ -58,6 +59,8 @@ const OurStory = () => {
             </div>
           </div>
         </section>
+
+        <StoryJourneyMap />
 
         {/* Mission Section */}
         <section className="bg-background py-24 md:py-32 pt-[50px]">
