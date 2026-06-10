@@ -1,14 +1,13 @@
 import { motion } from "framer-motion";
-import heroBottle from "@/assets/hero-bottle.png"; // used as video poster & mobile fallback
 import kickLogoCropped from "@/assets/kick-logo-cropped.png";
 
 const Hero = () => {
   return (
     <section className="relative min-h-[calc(100vh-96px)] mt-[96px] flex items-center justify-center overflow-hidden">
 
-      {/* Video background – desktop only */}
+      {/* Video background – poster shows until playback starts (or if autoplay is blocked, e.g. iOS Low Power Mode) */}
       <video
-        className="absolute inset-0 w-full h-full object-cover hidden md:block"
+        className="absolute inset-0 w-full h-full object-cover"
         autoPlay
         muted
         loop
@@ -19,13 +18,6 @@ const Hero = () => {
       >
         <source src="/hero.mp4" type="video/mp4" />
       </video>
-
-      {/* Poster image – mobile only */}
-      <img
-        src={heroBottle}
-        alt="Kick wellness shot"
-        className="absolute inset-0 w-full h-full object-cover block md:hidden"
-      />
 
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent pointer-events-none" />
