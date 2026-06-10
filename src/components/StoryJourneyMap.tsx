@@ -40,8 +40,7 @@ const CITIES = [
     chapter: "The Discovery",
     story:
       "Ten years of studies, work, and too many aperitivos. It was here I first discovered functional ginger shots — a couple of sips and you feel completely reborn. I was hooked from day one.",
-    // 👉 Replace null with your photo path, e.g. image: "/images/paris.jpg"
-    image: null as string | null,
+    image: "/images/paris.jpg",
     placeholderGradient: "linear-gradient(135deg, #8b7fa8 0%, #5c5470 100%)",
     placeholderLabel: "📍 Paris, France",
   },
