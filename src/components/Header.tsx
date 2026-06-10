@@ -108,9 +108,6 @@ const Header = () => {
             <a href="/shop" className="text-sm font-medium text-white tracking-wide uppercase relative after:content-[''] after:absolute after:w-full after:h-[1px] after:bg-white after:bottom-0 after:left-0">
               {t("nav.shop")}
             </a>
-            <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[10px] text-white/60 italic font-serif whitespace-nowrap" style={{ fontFamily: 'Georgia, serif' }}>
-              coming soon
-            </span>
           </div>
         </div>
       </div>
