@@ -1,12 +1,44 @@
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import kickLogoCropped from "@/assets/kick-logo-cropped.png";
 
 const Hero = () => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // iOS Safari only autoplays videos it considers muted at load time, and
+    // React's `muted` prop doesn't reliably reach the DOM attribute — set it
+    // directly before attempting playback.
+    video.muted = true;
+    const tryPlay = () => {
+      video.play().catch(() => {
+        /* blocked — the touch fallback below will retry */
+      });
+    };
+    tryPlay();
+
+    // If autoplay is still blocked (e.g. iOS Low Power Mode), start playback
+    // on the user's first interaction with the page.
+    const onFirstInteraction = () => {
+      if (video.paused) tryPlay();
+    };
+    window.addEventListener("touchstart", onFirstInteraction, { once: true });
+    window.addEventListener("click", onFirstInteraction, { once: true });
+    return () => {
+      window.removeEventListener("touchstart", onFirstInteraction);
+      window.removeEventListener("click", onFirstInteraction);
+    };
+  }, []);
+
   return (
     <section className="relative min-h-[calc(100vh-96px)] mt-[96px] flex items-center justify-center overflow-hidden">
 
       {/* Video background – poster shows until playback starts (or if autoplay is blocked, e.g. iOS Low Power Mode) */}
       <video
+        ref={videoRef}
         className="absolute inset-0 w-full h-full object-cover"
         autoPlay
         muted
