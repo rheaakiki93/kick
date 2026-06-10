@@ -3,15 +3,12 @@ import { motion } from "framer-motion";
 import kickLogoCropped from "@/assets/kick-logo-cropped.png";
 
 const Hero = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const video = videoRef.current;
+    const video = videoContainerRef.current?.querySelector("video");
     if (!video) return;
 
-    // iOS Safari only autoplays videos it considers muted at load time, and
-    // React's `muted` prop doesn't reliably reach the DOM attribute — set it
-    // directly before attempting playback.
     video.muted = true;
     const tryPlay = () => {
       video.play().catch(() => {
@@ -36,20 +33,27 @@ const Hero = () => {
   return (
     <section className="relative min-h-[calc(100vh-96px)] mt-[96px] flex items-center justify-center overflow-hidden">
 
-      {/* Video background – poster shows until playback starts (or if autoplay is blocked, e.g. iOS Low Power Mode) */}
-      <video
-        ref={videoRef}
-        className="absolute inset-0 w-full h-full object-cover"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        poster="/hero-poster.jpg"
-        style={{ filter: 'brightness(0.85) contrast(1.15) saturate(1.3)' }}
-      >
-        <source src="/hero.mp4" type="video/mp4" />
-      </video>
+      {/* Video background – injected as raw HTML because React omits the
+          `muted` attribute from the DOM, and iOS Safari only allows autoplay
+          for videos that are muted at parse time. Poster shows until playback
+          starts (or if autoplay is blocked, e.g. iOS Low Power Mode). */}
+      <div
+        ref={videoContainerRef}
+        className="absolute inset-0"
+        dangerouslySetInnerHTML={{
+          __html: `
+            <video
+              class="w-full h-full object-cover"
+              autoplay muted loop playsinline
+              preload="auto"
+              poster="/hero-poster.jpg"
+              style="filter: brightness(0.85) contrast(1.15) saturate(1.3)"
+            >
+              <source src="/hero.mp4" type="video/mp4" />
+            </video>
+          `,
+        }}
+      />
 
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent pointer-events-none" />
