@@ -280,12 +280,12 @@ const StoryJourneyMap = () => {
               <div className="grid md:grid-cols-2 min-h-[320px]">
 
                 {/* Photo side */}
-                <div className="relative min-h-[220px] md:min-h-[320px] overflow-hidden">
+                <div className="relative md:min-h-[320px] overflow-hidden">
                   {CITIES[selected].image ? (
                     <img
                       src={CITIES[selected].image!}
                       alt={CITIES[selected].name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-[240px] md:h-full object-cover"
                     />
                   ) : (
                     <div
