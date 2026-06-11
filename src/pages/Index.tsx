@@ -4,14 +4,12 @@ import MarqueeBanner from "@/components/MarqueeBanner";
 import Ingredients from "@/components/Ingredients";
 import Benefits from "@/components/Benefits";
 import Newsletter from "@/components/Newsletter";
-import TypewriterTagline from "@/components/TypewriterTagline";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
 const Index = () => {
   return (
     <Layout>
-      <TypewriterTagline />
       <Hero />
       <section className="bg-secondary py-3">
         <div className="container mx-auto px-6">
