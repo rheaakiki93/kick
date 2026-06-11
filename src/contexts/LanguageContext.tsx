@@ -183,6 +183,13 @@ const translations: Record<Language, Record<string, string>> = {
     "survey.toast_success_title": "Thanks for your feedback!",
     "survey.toast_success_desc": "We appreciate you taking the time to share your thoughts.",
 
+    // Shop
+    "shop.title": "Shop",
+    "shop.subtitle": "Pure, cold-pressed ginger shots delivered to your door.",
+    "shop.buy_now": "Buy now",
+    "shop.delivery_title": "🚚 Wednesday delivery in Milan",
+    "shop.delivery_desc": "Order by Sunday evening — we deliver straight to your door every Wednesday.",
+
     // NotFound
     "notfound.title": "404",
     "notfound.message": "Oops! Page not found",
@@ -358,6 +365,13 @@ const translations: Record<Language, Record<string, string>> = {
     "survey.toast_error_desc": "Riprova più tardi.",
     "survey.toast_success_title": "Grazie per il tuo feedback!",
     "survey.toast_success_desc": "Apprezziamo che tu abbia dedicato del tempo per condividere le tue opinioni.",
+
+    // Shop
+    "shop.title": "Shop",
+    "shop.subtitle": "Shot di zenzero puro, mela e limone — pressati a freddo e consegnati a casa tua.",
+    "shop.buy_now": "Acquista ora",
+    "shop.delivery_title": "🚚 Consegna ogni mercoledì a Milano",
+    "shop.delivery_desc": "Ordina entro domenica sera — consegniamo direttamente a casa tua ogni mercoledì.",
 
     // NotFound
     "notfound.title": "404",
