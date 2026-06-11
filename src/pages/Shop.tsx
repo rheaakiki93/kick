@@ -4,6 +4,9 @@ import { Loader2, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { addToCart } from "@/lib/cart";
+
+const PRODUCT_IMAGE = "/product-ginger-shots.png";
 
 interface StripeProduct {
   id: string;
@@ -26,6 +29,19 @@ const Shop = () => {
       .catch((e) => console.error("Failed to fetch products:", e))
       .finally(() => setLoading(false));
   }, []);
+
+  const handleAddToCart = (product: StripeProduct) => {
+    if (!product.defaultPrice) return;
+    addToCart({
+      priceId: product.defaultPrice.id,
+      productId: product.id,
+      name: product.name,
+      amount: product.defaultPrice.amount,
+      currency: product.defaultPrice.currency,
+      image: PRODUCT_IMAGE,
+    });
+    toast.success(t("shop.added_to_cart"), { position: "top-center" });
+  };
 
   const handleBuyNow = async (product: StripeProduct) => {
     if (!product.defaultPrice) return;
@@ -101,14 +117,26 @@ const Shop = () => {
                       <p className="font-bold text-foreground text-2xl">
                         {product.defaultPrice ? `€${product.defaultPrice.amount.toFixed(2)}` : "—"}
                       </p>
-                      <Button
-                        size="lg"
-                        className="w-full sm:w-auto px-12"
-                        onClick={() => handleBuyNow(product)}
-                        disabled={buyingId === product.id || !product.defaultPrice}
-                      >
-                        {buyingId === product.id ? <Loader2 className="w-4 h-4 animate-spin" /> : t("shop.buy_now")}
-                      </Button>
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <Button
+                          size="lg"
+                          className="w-full sm:w-auto px-12"
+                          onClick={() => handleBuyNow(product)}
+                          disabled={buyingId === product.id || !product.defaultPrice}
+                        >
+                          {buyingId === product.id ? <Loader2 className="w-4 h-4 animate-spin" /> : t("shop.buy_now")}
+                        </Button>
+                        <Button
+                          size="lg"
+                          variant="outline"
+                          className="w-full sm:w-auto px-8"
+                          onClick={() => handleAddToCart(product)}
+                          disabled={!product.defaultPrice}
+                        >
+                          <ShoppingCart className="w-4 h-4 mr-2" />
+                          {t("shop.add_to_cart")}
+                        </Button>
+                      </div>
                       <div className="flex items-start gap-3 bg-primary/10 rounded-xl px-4 py-4">
                         <span className="text-xl">🚚</span>
                         <div>
