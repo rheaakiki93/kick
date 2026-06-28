@@ -84,7 +84,7 @@ const Header = () => {
 
         <div className="flex items-center gap-6">
           {/* Instagram */}
-          <a href="https://www.instagram.com/kickmilano/" target="_blank" rel="noopener noreferrer" className="text-white/90 hover:text-white transition-colors">
+          <a href="https://www.instagram.com/kick_lab_/" target="_blank" rel="noopener noreferrer" className="text-white/90 hover:text-white transition-colors">
             <Instagram className="w-5 h-5" />
           </a>
           {/* Language Toggle */}

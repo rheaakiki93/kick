@@ -41,7 +41,7 @@ const Footer = () => {
           <div>
             <h4 className="font-medium text-white mb-4 text-sm uppercase tracking-wide font-sans">{t("footer.follow")}</h4>
             <div className="flex gap-3">
-              <a href="https://www.instagram.com/kickmilano/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors group">
+              <a href="https://www.instagram.com/kick_lab_/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors group">
                 <Instagram className="w-5 h-5 text-white/60 group-hover:text-white" />
               </a>
             </div>

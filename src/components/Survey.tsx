@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-const SITE_URL = "https://kickmilano.lovable.app/survey";
+const SITE_URL = "https://kicklab.it/survey";
 
 const Survey = () => {
   const { toast } = useToast();
@@ -79,14 +79,14 @@ const Survey = () => {
           className="max-w-2xl mx-auto mb-16"
         >
           <a
-            href="https://www.instagram.com/kickmilano/"
+            href="https://www.instagram.com/kick_lab_/"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-4 bg-secondary text-white px-8 py-5 hover:scale-[1.02] transition-transform shadow-none"
           >
             <Instagram className="w-8 h-8" />
             <div className="text-left">
-              <p className="tracking-tight text-sm font-normal">@kickmilano</p>
+              <p className="tracking-tight text-sm font-normal">@kick_lab_</p>
               <p className="text-sm text-white/80">Seguici su Instagram</p>
             </div>
           </a>
