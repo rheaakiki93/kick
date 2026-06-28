@@ -28,12 +28,45 @@ const fadeUp = {
   transition: { duration: 0.5 },
 };
 
-const GALLERY = [
-  bottleGinger,
-  "/images/shop-5pack.webp",
-  "/images/shop-flatlay.webp",
-  "/images/shop-lifestyle.webp",
+type GalleryItem = { type: "image"; src: string } | { type: "nutrition" };
+const GALLERY: GalleryItem[] = [
+  { type: "image", src: bottleGinger },
+  { type: "image", src: "/images/shop-5pack.webp" },
+  { type: "image", src: "/images/shop-flatlay.webp" },
+  { type: "image", src: "/images/shop-lifestyle.webp" },
+  { type: "nutrition" },
 ];
+
+const NUTRITION: { label: L; value: string; sub?: { label: L; value: string } }[] = [
+  { label: { en: "Energy", it: "Energia" }, value: "40kcal" },
+  { label: { en: "Fat", it: "Grassi" }, value: "0g", sub: { label: { en: "of which saturates", it: "di cui saturi" }, value: "0g" } },
+  { label: { en: "Carbohydrate", it: "Carboidrati" }, value: "10.5g", sub: { label: { en: "of which sugars", it: "di cui zuccheri" }, value: "7.4g" } },
+  { label: { en: "Protein", it: "Proteine" }, value: "0.4g" },
+  { label: { en: "Salt", it: "Sale" }, value: "0g" },
+];
+
+const NutritionPanel = ({ tr, className = "" }: { tr: (s: L) => string; className?: string }) => (
+  <div className={`bg-secondary text-white flex flex-col justify-center p-8 sm:p-10 ${className}`}>
+    <h3 className="text-2xl sm:text-3xl font-bold uppercase tracking-wide leading-none">
+      {tr({ en: "Nutritional values", it: "Valori nutrizionali" })}
+    </h3>
+    <p className="text-lg font-semibold text-white/80 mt-1 mb-5">(100ml)</p>
+    <div className="border-t border-white/25">
+      {NUTRITION.map((row) => (
+        <div key={row.label.en} className="flex items-start justify-between gap-4 py-3 border-b border-white/25">
+          <div className="uppercase text-xs sm:text-sm tracking-wider text-white/85 leading-snug">
+            <p>{tr(row.label)}</p>
+            {row.sub && <p className="text-white/70">{tr(row.sub.label)}</p>}
+          </div>
+          <div className="text-right font-bold text-lg sm:text-xl leading-snug">
+            <p>{row.value}</p>
+            {row.sub && <p>{row.sub.value}</p>}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
 
 const STATS: { value: string; label: L }[] = [
   { value: "60ml", label: { en: "Per shot", it: "Per shot" } },
@@ -112,23 +145,35 @@ const Shop = () => {
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
               {/* Gallery */}
               <div className="lg:sticky lg:top-28">
-                <div className="aspect-square w-full bg-muted flex items-center justify-center p-10">
-                  <img
-                    src={GALLERY[activeImg]}
-                    alt={PRODUCT_NAME}
-                    className="w-full h-full object-contain transition-opacity duration-300"
-                  />
+                <div className="aspect-square w-full bg-muted flex items-center justify-center overflow-hidden">
+                  {GALLERY[activeImg].type === "nutrition" ? (
+                    <NutritionPanel tr={tr} className="w-full h-full overflow-auto" />
+                  ) : (
+                    <img
+                      src={GALLERY[activeImg].src}
+                      alt={PRODUCT_NAME}
+                      className="w-full h-full object-contain p-10 transition-opacity duration-300"
+                    />
+                  )}
                 </div>
-                <div className="grid grid-cols-4 gap-px mt-px">
-                  {GALLERY.map((img, i) => (
+                <div className="grid grid-cols-5 gap-px mt-px">
+                  {GALLERY.map((item, i) => (
                     <button
                       key={i}
                       onClick={() => setActiveImg(i)}
-                      className={`aspect-square bg-muted p-3 transition-all ${
+                      className={`aspect-square overflow-hidden transition-all ${
                         activeImg === i ? "ring-2 ring-inset ring-primary" : "opacity-70 hover:opacity-100"
                       }`}
                     >
-                      <img src={img} alt="" className="w-full h-full object-contain" />
+                      {item.type === "nutrition" ? (
+                        <div className="w-full h-full bg-secondary flex items-center justify-center p-1">
+                          <span className="text-[8px] font-bold uppercase tracking-wide text-white text-center leading-tight">
+                            {tr({ en: "Nutrition", it: "Valori" })}
+                          </span>
+                        </div>
+                      ) : (
+                        <img src={item.src} alt="" className="w-full h-full object-contain bg-muted p-3" />
+                      )}
                     </button>
                   ))}
                 </div>
