@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      orders: {
+        Row: {
+          address: string
+          amount: number
+          cap: string
+          city: string
+          created_at: string
+          currency: string
+          email: string
+          id: string
+          name: string
+          notes: string | null
+          pack_id: string
+          pack_label: string
+          phone: string
+          status: string
+        }
+        Insert: {
+          address: string
+          amount: number
+          cap: string
+          city?: string
+          created_at?: string
+          currency?: string
+          email: string
+          id?: string
+          name: string
+          notes?: string | null
+          pack_id: string
+          pack_label: string
+          phone: string
+          status?: string
+        }
+        Update: {
+          address?: string
+          amount?: number
+          cap?: string
+          city?: string
+          created_at?: string
+          currency?: string
+          email?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          pack_id?: string
+          pack_label?: string
+          phone?: string
+          status?: string
+        }
+        Relationships: []
+      }
       survey_responses: {
         Row: {
           created_at: string
