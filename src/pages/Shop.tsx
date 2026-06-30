@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
-import { Loader2, Leaf, Snowflake, MapPin, Check, Truck } from "lucide-react";
+import { Leaf, Snowflake, MapPin, Check, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { CheckoutDialog } from "@/components/CheckoutDialog";
 
 import bottleGinger from "@/assets/kick-bottle-ginger.png";
 import drinkingImg from "@/assets/illustration-drinking.png";
@@ -90,44 +90,14 @@ const FAQS: { q: L; a: L }[] = [
 const Shop = () => {
   const [selectedPackId, setSelectedPackId] = useState(PACKS[0].id);
   const [activeImg, setActiveImg] = useState(0);
-  const [buying, setBuying] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
   const { t, language } = useLanguage();
   const tr = (s: L) => s[language];
 
   const selectedPack = PACKS.find((p) => p.id === selectedPackId) ?? PACKS[0];
   const priceLabel = `€${selectedPack.amount.toFixed(2)}`;
 
-  const handleBuyNow = async () => {
-    setBuying(true);
-    try {
-      const response = await fetch("/api/create-checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          items: [{
-            name: PRODUCT_NAME,
-            variantTitle: selectedPack.label.en,
-            price: {
-              amount: String(selectedPack.amount),
-              currencyCode: "eur",
-            },
-            quantity: 1,
-            imageUrl: `${window.location.origin}/images/shop-5pack.webp`,
-          }],
-          successUrl: `${window.location.origin}/?order=success`,
-          cancelUrl: `${window.location.origin}/shop`,
-        }),
-      });
-      const data = await response.json();
-      if (!response.ok || !data?.url) throw new Error(data?.error || "Failed to create checkout");
-      window.location.href = data.url;
-    } catch (err) {
-      console.error("Checkout error:", err);
-      toast.error("Errore. Riprova.", { position: "top-center" });
-    } finally {
-      setBuying(false);
-    }
-  };
+  const handleBuyNow = () => setCheckoutOpen(true);
 
   const scrollToBuy = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -249,9 +219,8 @@ const Shop = () => {
                     size="lg"
                     className="w-full mt-5 text-base py-6 rounded-none"
                     onClick={handleBuyNow}
-                    disabled={buying}
                   >
-                    {buying ? <Loader2 className="w-4 h-4 animate-spin" /> : t("shop.buy_now")}
+                    {t("shop.buy_now")}
                   </Button>
 
                   {/* Delivery callout — sharp */}
@@ -388,6 +357,14 @@ const Shop = () => {
           </Button>
         </div>
       </section>
+
+      <CheckoutDialog
+        open={checkoutOpen}
+        onOpenChange={setCheckoutOpen}
+        packId={selectedPack.id}
+        packLabel={tr(selectedPack.label)}
+        amount={selectedPack.amount}
+      />
     </Layout>
   );
 };

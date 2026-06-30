@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import kickLogo from "@/assets/kick-logo.png";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { CartDrawer } from "@/components/CartDrawer";
 
 const Header = () => {
   const [hidden, setHidden] = useState(false);
@@ -110,9 +109,6 @@ const Header = () => {
               {t("nav.shop")}
             </a>
           </div>
-
-          {/* Cart */}
-          <CartDrawer />
         </div>
       </div>
 
