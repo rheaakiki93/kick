@@ -53,8 +53,7 @@ const CITIES = [
     chapter: "The Birth of Kick",
     story:
       "Relocated and couldn't find the shots I loved anywhere. So I made them myself — using the exceptional organic ingredients Italy has to offer. Starting with just three: ginger, green apple, and lemon. That's how Kick was born.",
-    // 👉 Replace null with your photo path, e.g. image: "/images/milan.jpg"
-    image: null as string | null,
+    image: "/images/milan.jpg" as string | null,
     placeholderGradient: "linear-gradient(135deg, #d4882a 0%, #a85c10 100%)",
     placeholderLabel: "📍 Milan, Italy",
   },
