@@ -275,15 +275,15 @@ const StoryJourneyMap = () => {
               className="mt-6 max-w-4xl mx-auto rounded-2xl overflow-hidden"
               style={{ background: "rgba(0,0,0,0.2)", border: "1px solid rgba(255,255,255,0.12)" }}
             >
-              <div className="grid md:grid-cols-2 min-h-[320px]">
+              <div className="grid md:grid-cols-2 min-h-[420px]">
 
                 {/* Photo side */}
-                <div className="relative md:min-h-[320px] overflow-hidden">
+                <div className="relative md:min-h-[420px] overflow-hidden bg-black/25">
                   {CITIES[selected].image ? (
                     <img
                       src={CITIES[selected].image!}
                       alt={CITIES[selected].name}
-                      className="w-full h-[240px] md:h-full object-cover"
+                      className="w-full h-[360px] md:h-full object-contain"
                     />
                   ) : (
                     <div
