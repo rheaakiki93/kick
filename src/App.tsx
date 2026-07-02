@@ -4,11 +4,13 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { PageViewTracker } from "@/components/PageViewTracker";
 import Index from "./pages/Index";
 import FAQPage from "./pages/FAQ";
 import SurveyPage from "./pages/Survey";
 import OurStoryPage from "./pages/OurStory";
 import Shop from "./pages/Shop";
+import Analytics from "./pages/Analytics";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -16,12 +18,15 @@ const queryClient = new QueryClient();
 const AppContent = () => {
   return (
     <BrowserRouter>
+      <PageViewTracker />
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/survey" element={<SurveyPage />} />
         <Route path="/our-story" element={<OurStoryPage />} />
         <Route path="/shop" element={<Shop />} />
+        {/* Private, unlinked analytics dashboard (login-gated) */}
+        <Route path="/analytics" element={<Analytics />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
