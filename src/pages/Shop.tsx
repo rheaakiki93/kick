@@ -5,6 +5,10 @@ import { Leaf, Snowflake, MapPin, Check, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { CheckoutDialog } from "@/components/CheckoutDialog";
+import ComingSoonShop from "@/components/ComingSoonShop";
+
+// Flip to true to relaunch the eshop.
+const SHOP_LIVE = false;
 
 import bottleGinger from "@/assets/kick-bottle-ginger.png";
 import drinkingImg from "@/assets/illustration-drinking.png";
@@ -88,6 +92,12 @@ const FAQS: { q: L; a: L }[] = [
 ];
 
 const Shop = () => {
+  if (!SHOP_LIVE) return <ComingSoonShop />;
+
+  return <ShopLive />;
+};
+
+const ShopLive = () => {
   const [selectedPackId, setSelectedPackId] = useState(PACKS[0].id);
   const [activeImg, setActiveImg] = useState(0);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
