@@ -110,7 +110,18 @@ const Dashboard = ({ onSignOut }: { onSignOut: () => void }) => {
     load();
   }, []);
 
-  const totalRevenue = useMemo(() => orders.reduce((s, o) => s + Number(o.amount), 0), [orders]);
+  const markPaid = async (id: string) => {
+    const prev = orders;
+    setOrders((os) => os.map((o) => (o.id === id ? { ...o, status: "paid" } : o)));
+    const { error } = await supabase.from("orders").update({ status: "paid" }).eq("id", id);
+    if (error) {
+      setOrders(prev);
+      setError(error.message);
+    }
+  };
+
+  const paidOrders = useMemo(() => orders.filter((o) => o.status === "paid"), [orders]);
+  const totalRevenue = useMemo(() => paidOrders.reduce((s, o) => s + Number(o.amount), 0), [paidOrders]);
   const uniqueVisitors = useMemo(
     () => new Set(views.map((v) => v.visitor_id).filter(Boolean)).size,
     [views]
@@ -151,11 +162,12 @@ const Dashboard = ({ onSignOut }: { onSignOut: () => void }) => {
           <div className="flex items-center gap-2 text-neutral-400"><Loader2 className="w-4 h-4 animate-spin" /> Loading…</div>
         ) : (
           <>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
               <Metric label="Total page views" value={views.length} />
               <Metric label="Unique visitors" value={uniqueVisitors} />
               <Metric label="Orders" value={orders.length} />
-              <Metric label="Order value" value={eur(totalRevenue)} />
+              <Metric label="Paid orders" value={paidOrders.length} />
+              <Metric label="Paid revenue" value={eur(totalRevenue)} />
             </div>
 
             {/* Views per page */}
@@ -189,12 +201,14 @@ const Dashboard = ({ onSignOut }: { onSignOut: () => void }) => {
             <section>
               <h2 className="text-lg font-semibold mb-1">Orders</h2>
               <p className="text-neutral-500 text-xs mb-3">
-                An order is saved when a customer submits the checkout form and is sent to Revolut. Confirm actual payment in your Revolut dashboard.
+                An order is saved when a customer submits the checkout form and is sent to Revolut — it starts as "Pending" and does not mean they paid.
+                Check the Revolut Business app for a matching transaction, then click "mark paid" here. Only paid orders count toward paid revenue.
               </p>
               <div className="overflow-x-auto rounded-lg border border-neutral-800">
                 <table className="w-full text-sm whitespace-nowrap">
                   <thead className="bg-neutral-900 text-neutral-400 text-left">
                     <tr>
+                      <th className="px-4 py-2 font-medium">Status</th>
                       <th className="px-4 py-2 font-medium">Date</th>
                       <th className="px-4 py-2 font-medium">Pack</th>
                       <th className="px-4 py-2 font-medium text-right">Amount</th>
@@ -208,9 +222,22 @@ const Dashboard = ({ onSignOut }: { onSignOut: () => void }) => {
                   </thead>
                   <tbody>
                     {orders.length === 0 ? (
-                      <tr><td colSpan={9} className="px-4 py-6 text-neutral-500 text-center">No orders yet.</td></tr>
+                      <tr><td colSpan={10} className="px-4 py-6 text-neutral-500 text-center">No orders yet.</td></tr>
                     ) : orders.map((o) => (
                       <tr key={o.id} className="border-t border-neutral-800">
+                        <td className="px-4 py-2">
+                          {o.status === "paid" ? (
+                            <span className="inline-flex items-center rounded-full bg-emerald-900/40 text-emerald-400 text-xs px-2 py-1">Paid</span>
+                          ) : (
+                            <button
+                              onClick={() => markPaid(o.id)}
+                              className="inline-flex items-center rounded-full bg-amber-900/40 text-amber-400 text-xs px-2 py-1 hover:bg-amber-900/70 transition-colors"
+                              title="Confirm in Revolut first, then click to mark paid"
+                            >
+                              Pending — mark paid
+                            </button>
+                          )}
+                        </td>
                         <td className="px-4 py-2 text-neutral-400">{fmtDate(o.created_at)}</td>
                         <td className="px-4 py-2">{o.pack_label}</td>
                         <td className="px-4 py-2 text-right">{eur(Number(o.amount))}</td>
