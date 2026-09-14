@@ -12,9 +12,9 @@ type Order = {
   name: string;
   email: string;
   phone: string;
-  address: string;
-  city: string;
-  cap: string;
+  pickup_location: string | null;
+  pickup_date: string | null;
+  pickup_time: string | null;
   notes: string | null;
   pack_label: string;
   amount: number;
@@ -215,14 +215,13 @@ const Dashboard = ({ onSignOut }: { onSignOut: () => void }) => {
                       <th className="px-4 py-2 font-medium">Name</th>
                       <th className="px-4 py-2 font-medium">Email</th>
                       <th className="px-4 py-2 font-medium">Phone</th>
-                      <th className="px-4 py-2 font-medium">Address</th>
-                      <th className="px-4 py-2 font-medium">CAP</th>
+                      <th className="px-4 py-2 font-medium">Pickup</th>
                       <th className="px-4 py-2 font-medium">Notes</th>
                     </tr>
                   </thead>
                   <tbody>
                     {orders.length === 0 ? (
-                      <tr><td colSpan={10} className="px-4 py-6 text-neutral-500 text-center">No orders yet.</td></tr>
+                      <tr><td colSpan={9} className="px-4 py-6 text-neutral-500 text-center">No orders yet.</td></tr>
                     ) : orders.map((o) => (
                       <tr key={o.id} className="border-t border-neutral-800">
                         <td className="px-4 py-2">
@@ -244,8 +243,11 @@ const Dashboard = ({ onSignOut }: { onSignOut: () => void }) => {
                         <td className="px-4 py-2">{o.name}</td>
                         <td className="px-4 py-2">{o.email}</td>
                         <td className="px-4 py-2">{o.phone}</td>
-                        <td className="px-4 py-2 whitespace-normal max-w-xs">{o.address}, {o.city}</td>
-                        <td className="px-4 py-2">{o.cap}</td>
+                        <td className="px-4 py-2 whitespace-normal max-w-xs">
+                          {o.pickup_location ?? "—"}
+                          {o.pickup_date && <span className="text-neutral-400"> · {o.pickup_date}</span>}
+                          {o.pickup_time && <span className="text-neutral-400"> · {o.pickup_time}</span>}
+                        </td>
                         <td className="px-4 py-2 whitespace-normal max-w-xs text-neutral-400">{o.notes || "—"}</td>
                       </tr>
                     ))}

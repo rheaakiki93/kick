@@ -193,8 +193,8 @@ const translations: Record<Language, Record<string, string>> = {
     "shop.cart_empty": "Your cart is empty",
     "shop.cart_total": "Total",
     "shop.checkout": "Checkout",
-    "shop.delivery_title": "🚚 Wednesday delivery in Milan",
-    "shop.delivery_desc": "Order by Sunday evening — we deliver straight to your door every Wednesday.",
+    "shop.pickup_title": "📍 Pickup in Milan",
+    "shop.pickup_desc": "Choose a pickup spot, day and time — at least 2 days' notice, Monday to Friday.",
 
     // NotFound
     "notfound.title": "404",
@@ -382,8 +382,8 @@ const translations: Record<Language, Record<string, string>> = {
     "shop.cart_empty": "Il tuo carrello è vuoto",
     "shop.cart_total": "Totale",
     "shop.checkout": "Checkout",
-    "shop.delivery_title": "🚚 Consegna ogni mercoledì a Milano",
-    "shop.delivery_desc": "Ordina entro domenica sera — consegniamo direttamente a casa tua ogni mercoledì.",
+    "shop.pickup_title": "📍 Ritiro a Milano",
+    "shop.pickup_desc": "Scegli un luogo, giorno e orario di ritiro — almeno 2 giorni di preavviso, dal lunedì al venerdì.",
 
     // NotFound
     "notfound.title": "404",

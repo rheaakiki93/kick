@@ -3,14 +3,16 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, Truck, ShieldCheck } from "lucide-react";
+import { Loader2, MapPin, ShieldCheck, CalendarClock } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import {
   REVOLUT_PAYMENT_LINKS,
   isPaymentLinkConfigured,
-  isInDeliveryZone,
-  normalizeCap,
+  PICKUP_LOCATIONS,
+  PICKUP_TIME_SLOTS,
+  earliestPickupDate,
+  isValidPickupDate,
 } from "@/lib/checkout";
 
 type L = { en: string; it: string };
@@ -23,7 +25,15 @@ interface CheckoutDialogProps {
   amount: number;
 }
 
-const emptyForm = { name: "", email: "", phone: "", address: "", city: "Milano", cap: "", notes: "" };
+const emptyForm = {
+  name: "",
+  email: "",
+  phone: "",
+  pickupLocationId: PICKUP_LOCATIONS[0].id,
+  pickupDate: "",
+  pickupTimeId: "",
+  notes: "",
+};
 
 export const CheckoutDialog = ({ open, onOpenChange, packId, packLabel, amount }: CheckoutDialogProps) => {
   const { language } = useLanguage();
@@ -38,11 +48,14 @@ export const CheckoutDialog = ({ open, onOpenChange, packId, packLabel, amount }
     if (error) setError(null);
   };
 
+  const minDate = earliestPickupDate();
+  const selectedLocation = PICKUP_LOCATIONS.find((p) => p.id === form.pickupLocationId) ?? PICKUP_LOCATIONS[0];
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
-    if (!form.name.trim() || !form.email.trim() || !form.phone.trim() || !form.address.trim()) {
+    if (!form.name.trim() || !form.email.trim() || !form.phone.trim()) {
       setError({ en: "Please fill in all required fields.", it: "Compila tutti i campi obbligatori." });
       return;
     }
@@ -50,11 +63,15 @@ export const CheckoutDialog = ({ open, onOpenChange, packId, packLabel, amount }
       setError({ en: "Please enter a valid email address.", it: "Inserisci un indirizzo email valido." });
       return;
     }
-    if (!isInDeliveryZone(form.cap)) {
+    if (!form.pickupDate || !isValidPickupDate(form.pickupDate)) {
       setError({
-        en: "Sorry — we don't deliver to that postcode yet. We currently deliver across Milan (CAP 201xx).",
-        it: "Spiacenti — non consegniamo ancora a questo CAP. Al momento consegniamo in tutta Milano (CAP 201xx).",
+        en: "Please pick a valid pickup date — at least 2 days from now, Monday to Friday.",
+        it: "Scegli una data di ritiro valida — almeno 2 giorni da oggi, dal lunedì al venerdì.",
       });
+      return;
+    }
+    if (!form.pickupTimeId) {
+      setError({ en: "Please choose a pickup time.", it: "Scegli un orario di ritiro." });
       return;
     }
     if (!isPaymentLinkConfigured(packId)) {
@@ -62,14 +79,16 @@ export const CheckoutDialog = ({ open, onOpenChange, packId, packLabel, amount }
       return;
     }
 
+    const pickupTime = PICKUP_TIME_SLOTS.find((s) => s.id === form.pickupTimeId);
+
     setSubmitting(true);
     const { error: dbError } = await supabase.from("orders").insert({
       name: form.name.trim(),
       email: form.email.trim(),
       phone: form.phone.trim(),
-      address: form.address.trim(),
-      city: form.city.trim() || "Milano",
-      cap: normalizeCap(form.cap),
+      pickup_location: selectedLocation.id,
+      pickup_date: form.pickupDate,
+      pickup_time: pickupTime ? pickupTime.id : form.pickupTimeId,
       notes: form.notes.trim() || null,
       pack_id: packId,
       pack_label: packLabel,
@@ -88,23 +107,22 @@ export const CheckoutDialog = ({ open, onOpenChange, packId, packLabel, amount }
   };
 
   const field = (
-    key: keyof typeof form,
+    key: "name" | "email" | "phone",
     label: L,
-    opts: { type?: string; placeholder?: string; required?: boolean; maxLength?: number; inputMode?: "text" | "numeric" | "email" | "tel" } = {}
+    opts: { type?: string; placeholder?: string; inputMode?: "text" | "numeric" | "email" | "tel" } = {}
   ) => (
     <div className="space-y-1.5">
       <Label htmlFor={key}>
         {tr(label)}
-        {opts.required !== false && <span className="text-primary"> *</span>}
+        <span className="text-primary"> *</span>
       </Label>
       <Input
         id={key}
         type={opts.type ?? "text"}
         inputMode={opts.inputMode}
         placeholder={opts.placeholder}
-        maxLength={opts.maxLength}
         value={form[key]}
-        onChange={(e) => set(key, key === "cap" ? normalizeCap(e.target.value) : e.target.value)}
+        onChange={(e) => set(key, e.target.value)}
       />
     </div>
   );
@@ -114,10 +132,10 @@ export const CheckoutDialog = ({ open, onOpenChange, packId, packLabel, amount }
       <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold tracking-tight">
-            {tr({ en: "Delivery details", it: "Dettagli di consegna" })}
+            {tr({ en: "Pickup details", it: "Dettagli di ritiro" })}
           </DialogTitle>
           <DialogDescription>
-            {`${packLabel} · €${amount.toFixed(2)} — ${tr({ en: "fresh delivery in Milan every Wednesday.", it: "consegna fresca a Milano ogni mercoledì." })}`}
+            {`${packLabel} · €${amount.toFixed(2)} — ${tr({ en: "no delivery, pick up in person.", it: "nessuna consegna, ritiro di persona." })}`}
           </DialogDescription>
         </DialogHeader>
 
@@ -125,14 +143,88 @@ export const CheckoutDialog = ({ open, onOpenChange, packId, packLabel, amount }
           {field("name", { en: "Full name", it: "Nome e cognome" }, { placeholder: "Giulia Rossi" })}
           {field("email", { en: "Email", it: "Email" }, { type: "email", inputMode: "email", placeholder: "giulia@email.com" })}
           {field("phone", { en: "Phone", it: "Telefono" }, { type: "tel", inputMode: "tel", placeholder: "+39 333 123 4567" })}
-          {field("address", { en: "Address (street, number, floor/buzzer)", it: "Indirizzo (via, numero, piano/citofono)" }, { placeholder: "Via Dante 12, scala B, 3° piano" })}
 
-          <div className="grid grid-cols-2 gap-3">
-            {field("city", { en: "City", it: "Città" })}
-            {field("cap", { en: "Postcode (CAP)", it: "CAP" }, { inputMode: "numeric", placeholder: "20121", maxLength: 5 })}
+          {/* Pickup location */}
+          <div className="space-y-1.5">
+            <Label>
+              {tr({ en: "Pickup location", it: "Luogo di ritiro" })}
+              <span className="text-primary"> *</span>
+            </Label>
+            <div className="grid grid-cols-3 gap-2">
+              {PICKUP_LOCATIONS.map((loc) => {
+                const active = loc.id === form.pickupLocationId;
+                return (
+                  <button
+                    key={loc.id}
+                    type="button"
+                    onClick={() => set("pickupLocationId", loc.id)}
+                    aria-pressed={active}
+                    className={`font-semibold px-3 py-2.5 text-sm border-2 transition-colors ${
+                      active
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "bg-transparent text-foreground border-border hover:border-primary"
+                    }`}
+                  >
+                    {tr(loc.name)}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-xs text-muted-foreground pt-0.5">
+              {tr(selectedLocation.address)} · {tr(selectedLocation.hours)}
+            </p>
           </div>
 
-          {field("notes", { en: "Delivery notes (optional)", it: "Note di consegna (facoltativo)" }, { required: false, placeholder: tr({ en: "e.g. leave with the doorman", it: "es. lasciare al portinaio" }) })}
+          {/* Pickup date + time */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="pickupDate">
+                {tr({ en: "Pickup date", it: "Data di ritiro" })}
+                <span className="text-primary"> *</span>
+              </Label>
+              <Input
+                id="pickupDate"
+                type="date"
+                min={minDate}
+                value={form.pickupDate}
+                onChange={(e) => set("pickupDate", e.target.value)}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="pickupTime">
+                {tr({ en: "Pickup time", it: "Orario di ritiro" })}
+                <span className="text-primary"> *</span>
+              </Label>
+              <select
+                id="pickupTime"
+                value={form.pickupTimeId}
+                onChange={(e) => set("pickupTimeId", e.target.value)}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              >
+                <option value="" disabled>
+                  {tr({ en: "Select…", it: "Seleziona…" })}
+                </option>
+                {PICKUP_TIME_SLOTS.map((slot) => (
+                  <option key={slot.id} value={slot.id}>
+                    {tr(slot.label)}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground -mt-2">
+            {tr({ en: "Pickup needs at least 2 days' notice, Monday to Friday.", it: "Il ritiro richiede almeno 2 giorni di preavviso, dal lunedì al venerdì." })}
+          </p>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="notes">{tr({ en: "Pickup notes (optional)", it: "Note di ritiro (facoltativo)" })}</Label>
+            <Input
+              id="notes"
+              value={form.notes}
+              placeholder={tr({ en: "e.g. picking up for a friend too", it: "es. ritiro anche per un'amica" })}
+              onChange={(e) => set("notes", e.target.value)}
+            />
+          </div>
 
           {error && <p className="text-sm text-destructive leading-snug">{tr(error)}</p>}
 
@@ -150,8 +242,12 @@ export const CheckoutDialog = ({ open, onOpenChange, packId, packLabel, amount }
               {tr({ en: "Payment is processed securely by Revolut.", it: "Il pagamento è gestito in sicurezza da Revolut." })}
             </p>
             <p className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Truck className="w-4 h-4 text-primary flex-shrink-0" />
-              {tr({ en: "Order by Sunday evening for Wednesday delivery.", it: "Ordina entro domenica sera per la consegna di mercoledì." })}
+              <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
+              {tr({ en: "No delivery — pick up in person at your chosen spot.", it: "Nessuna consegna — ritiro di persona nel luogo scelto." })}
+            </p>
+            <p className="flex items-center gap-2 text-sm text-muted-foreground">
+              <CalendarClock className="w-4 h-4 text-primary flex-shrink-0" />
+              {tr({ en: "We'll confirm your exact pickup slot by email or phone.", it: "Confermeremo l'orario esatto di ritiro via email o telefono." })}
             </p>
           </div>
         </form>

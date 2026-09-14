@@ -16,10 +16,10 @@ export type Database = {
     Tables: {
       orders: {
         Row: {
-          address: string
+          address: string | null
           amount: number
-          cap: string
-          city: string
+          cap: string | null
+          city: string | null
           created_at: string
           currency: string
           email: string
@@ -29,13 +29,16 @@ export type Database = {
           pack_id: string
           pack_label: string
           phone: string
+          pickup_date: string | null
+          pickup_location: string | null
+          pickup_time: string | null
           status: string
         }
         Insert: {
-          address: string
+          address?: string | null
           amount: number
-          cap: string
-          city?: string
+          cap?: string | null
+          city?: string | null
           created_at?: string
           currency?: string
           email: string
@@ -45,13 +48,16 @@ export type Database = {
           pack_id: string
           pack_label: string
           phone: string
+          pickup_date?: string | null
+          pickup_location?: string | null
+          pickup_time?: string | null
           status?: string
         }
         Update: {
-          address?: string
+          address?: string | null
           amount?: number
-          cap?: string
-          city?: string
+          cap?: string | null
+          city?: string | null
           created_at?: string
           currency?: string
           email?: string
@@ -61,6 +67,9 @@ export type Database = {
           pack_id?: string
           pack_label?: string
           phone?: string
+          pickup_date?: string | null
+          pickup_location?: string | null
+          pickup_time?: string | null
           status?: string
         }
         Relationships: []

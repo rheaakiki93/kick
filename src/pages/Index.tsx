@@ -1,16 +1,19 @@
 import Layout from "@/components/Layout";
-import Hero from "@/components/Hero";
 import MarqueeBanner from "@/components/MarqueeBanner";
-import Ingredients from "@/components/Ingredients";
-import Benefits from "@/components/Benefits";
 import Newsletter from "@/components/Newsletter";
+import OriginStory from "@/components/OriginStory";
+import ProductSpotlight from "@/components/ProductSpotlight";
+import WavyDivider from "@/components/WavyDivider";
+import BenefitCallouts from "@/components/BenefitCallouts";
+import ComparisonTable from "@/components/ComparisonTable";
+import SocialGrid from "@/components/SocialGrid";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
 const Index = () => {
   return (
     <Layout>
-      <Hero />
+      <ProductSpotlight />
       <section className="bg-secondary py-3">
         <div className="container mx-auto px-6">
           <Link
@@ -24,8 +27,11 @@ const Index = () => {
         </div>
       </section>
       <MarqueeBanner />
-      <Benefits />
-      <Ingredients />
+      <OriginStory />
+      <WavyDivider className="bg-[#DD6A17] text-background" />
+      <BenefitCallouts />
+      <ComparisonTable />
+      <SocialGrid />
       <Newsletter />
     </Layout>
   );

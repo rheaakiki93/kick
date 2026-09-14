@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
-import { Leaf, Snowflake, MapPin, Check, Truck } from "lucide-react";
+import { Leaf, Snowflake, MapPin, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { CheckoutDialog } from "@/components/CheckoutDialog";
@@ -87,8 +87,8 @@ const INGREDIENTS: { img: string; name: L; desc: L; bg: string }[] = [
 
 const FAQS: { q: L; a: L }[] = [
   { q: { en: "How is Kick made?", it: "Come è fatto Kick?" }, a: { en: "Cold-pressed in small batches from fresh ginger, apple and lemon. Nothing added, nothing heated.", it: "Pressato a freddo in piccoli lotti da zenzero, mela e limone freschi. Niente aggiunto, niente riscaldato." } },
-  { q: { en: "What's in the bundle?", it: "Cosa contiene il pacco?" }, a: { en: "Choose a pack of 5 or 10 60ml ginger shots — your daily kicks delivered fresh.", it: "Scegli un pacco da 5 o 10 shot di zenzero da 60ml — le tue cariche quotidiane consegnate fresche." } },
-  { q: { en: "How does delivery work?", it: "Come funziona la consegna?" }, a: { en: "Order by Sunday evening and we deliver fresh to your door in Milan every Wednesday.", it: "Ordina entro domenica sera e consegniamo fresco a casa tua a Milano ogni mercoledì." } },
+  { q: { en: "What's in the bundle?", it: "Cosa contiene il pacco?" }, a: { en: "Choose a pack of 5 or 10 60ml ginger shots — your daily kicks, fresh and ready to pick up.", it: "Scegli un pacco da 5 o 10 shot di zenzero da 60ml — le tue cariche quotidiane, fresche e pronte per il ritiro." } },
+  { q: { en: "How does pickup work?", it: "Come funziona il ritiro?" }, a: { en: "No delivery — at checkout you pick a location (my place, Verde or Ceci), plus a day and time slot, with at least 2 days' notice, Monday to Friday.", it: "Nessuna consegna — al checkout scegli un luogo (casa mia, Verde o Ceci), più giorno e orario, con almeno 2 giorni di preavviso, dal lunedì al venerdì." } },
 ];
 
 const Shop = () => {
@@ -115,8 +115,8 @@ const ShopLive = () => {
     <Layout>
       {/* Announcement bar */}
       <div className="bg-kick-dark text-kick-cream text-center text-xs sm:text-sm font-medium tracking-wide py-2.5 px-4 mt-20 sm:mt-24 flex items-center justify-center gap-2">
-        <Truck className="w-4 h-4" />
-        {tr({ en: "Fresh delivery every Wednesday in Milan", it: "Consegna fresca ogni mercoledì a Milano" })}
+        <MapPin className="w-4 h-4" />
+        {tr({ en: "Pickup only in Milan — no delivery", it: "Solo ritiro a Milano — nessuna consegna" })}
       </div>
 
       {/* ===== HERO / PRODUCT ===== */}
@@ -233,11 +233,11 @@ const ShopLive = () => {
                     {t("shop.buy_now")}
                   </Button>
 
-                  {/* Delivery callout — sharp */}
+                  {/* Pickup callout — sharp */}
                   <div className="flex items-start gap-3 border-l-2 border-primary pl-4 mt-6">
                     <div>
-                      <p className="font-semibold text-foreground text-sm">{t("shop.delivery_title").replace("🚚 ", "")}</p>
-                      <p className="text-muted-foreground text-sm mt-1">{t("shop.delivery_desc")}</p>
+                      <p className="font-semibold text-foreground text-sm">{t("shop.pickup_title").replace("📍 ", "")}</p>
+                      <p className="text-muted-foreground text-sm mt-1">{t("shop.pickup_desc")}</p>
                     </div>
                   </div>
 
@@ -319,7 +319,7 @@ const ShopLive = () => {
                 { en: "Cold-pressed to keep every nutrient alive", it: "Pressato a freddo per preservare ogni nutriente" },
                 { en: "No added sugar, no concentrates, no preservatives", it: "Senza zuccheri aggiunti, concentrati o conservanti" },
                 { en: "Just ginger, apple and lemon", it: "Solo zenzero, mela e limone" },
-                { en: "Delivered fresh, never sitting on a shelf", it: "Consegnato fresco, mai fermo su uno scaffale" },
+                { en: "Fresh at pickup, never sitting on a shelf", it: "Fresco al ritiro, mai fermo su uno scaffale" },
               ].map((item) => (
                 <li key={item.en} className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
@@ -355,7 +355,7 @@ const ShopLive = () => {
             {tr({ en: "Ready to feel the kick?", it: "Pronto a sentire la carica?" })}
           </h2>
           <p className="text-primary-foreground/80 text-lg mt-4">
-            {tr({ en: "Fresh ginger shots, delivered weekly in Milan.", it: "Ginger shot freschi, consegnati ogni settimana a Milano." })}
+            {tr({ en: "Fresh ginger shots, ready for pickup in Milan.", it: "Ginger shot freschi, pronti per il ritiro a Milano." })}
           </p>
           <Button
             size="lg"
