@@ -16,4 +16,4 @@ User-agent: *
 Allow: /
 Disallow: /analytics
 
-Sitemap: https://kicklab.it/sitemap.xml
+Sitemap: https://www.kicklab.it/sitemap.xml
