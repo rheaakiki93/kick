@@ -5,7 +5,7 @@ const ProductSpotlight = () => (
     <img
       src={gingerShotSpotlight}
       alt="Ginger Shot — Spicy, on purpose. Fresh ginger root, cold-pressed for a natural energy kick and a boost to your immune system. Crisp apple for natural sweetness, no added sugar needed. Zesty lemon, packed with vitamin C to keep you feeling fresh all day."
-      className="w-full h-auto block"
+      className="w-full h-auto max-w-xl mx-auto block"
     />
   </section>
 );
