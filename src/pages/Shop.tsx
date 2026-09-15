@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { CheckoutDialog } from "@/components/CheckoutDialog";
 import ComingSoonShop from "@/components/ComingSoonShop";
+import SEO from "@/components/SEO";
 
 // Flip to true to relaunch the eshop.
 const SHOP_LIVE = false;
@@ -91,11 +92,20 @@ const FAQS: { q: L; a: L }[] = [
   { q: { en: "How does pickup work?", it: "Come funziona il ritiro?" }, a: { en: "No delivery — at checkout you pick a location (my place, Verde or Ceci), plus a day and time slot, with at least 2 days' notice, Monday to Friday.", it: "Nessuna consegna — al checkout scegli un luogo (casa mia, Verde o Ceci), più giorno e orario, con almeno 2 giorni di preavviso, dal lunedì al venerdì." } },
 ];
 
-const Shop = () => {
-  if (!SHOP_LIVE) return <ComingSoonShop />;
-
-  return <ShopLive />;
-};
+const Shop = () => (
+  <>
+    <SEO
+      title={SHOP_LIVE ? "Shop | Kick Ginger Shots" : "Shop | Kick by Kicklab — Coming Soon"}
+      description={
+        SHOP_LIVE
+          ? "Order Kick's cold-pressed ginger shots — pickup only in Milan. Pure ginger, apple and lemon, 60ml daily energy shots, no added sugar."
+          : "Kick's online shop is paused for now. Leave your email to be notified the moment fresh cold-pressed ginger shots are back."
+      }
+      path="/shop"
+    />
+    {SHOP_LIVE ? <ShopLive /> : <ComingSoonShop />}
+  </>
+);
 
 const ShopLive = () => {
   const [selectedPackId, setSelectedPackId] = useState(PACKS[0].id);

@@ -5,12 +5,18 @@ import kickBottleGinger from "@/assets/kick-bottle-ginger.png";
 import illustrationDrinking from "@/assets/illustration-drinking.png";
 import { useLanguage } from "@/contexts/LanguageContext";
 import StoryJourneyMap from "@/components/StoryJourneyMap";
+import SEO from "@/components/SEO";
 
 const OurStory = () => {
   const { t } = useLanguage();
 
   return (
     <Layout showHeaderBackground>
+      <SEO
+        title="Our Story | Kick by Kicklab"
+        description="How Kick started — founder Rhea's journey from Lebanon to Paris to Milan, and the belief that what you put in your body should be pure, powerful, and purposeful."
+        path="/our-story"
+      />
       <div className="pt-20">
         {/* Hero Section */}
         <section className="bg-secondary py-24 text-secondary md:py-[50px]">

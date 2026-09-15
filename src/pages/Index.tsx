@@ -7,12 +7,18 @@ import WavyDivider from "@/components/WavyDivider";
 import BenefitCallouts from "@/components/BenefitCallouts";
 import ComparisonTable from "@/components/ComparisonTable";
 import SocialGrid from "@/components/SocialGrid";
+import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
 const Index = () => {
   return (
     <Layout>
+      <SEO
+        title="Kick by Kicklab | Ginger Shots for Energy & Immunity"
+        description="Kick, by Kicklab, delivers pure, cold-pressed ginger shots with lemon, green apple, pepper, and turmeric. Boost your energy and immunity naturally with our 60ml daily wellness shots."
+        path="/"
+      />
       <ProductSpotlight />
       <section className="bg-secondary py-3">
         <div className="container mx-auto px-6">
