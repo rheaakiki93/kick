@@ -15,6 +15,7 @@ const Footer = () => {
               <img src={kickLogo} alt="kick" className="h-24 w-auto -mt-8 -ml-2 brightness-0 invert" />
             </a>
             <p className="text-white/50 text-sm leading-relaxed">{t("footer.tagline")}</p>
+            <p className="text-white/30 text-xs mt-3">{t("footer.kicklab")}</p>
           </div>
 
           <div>

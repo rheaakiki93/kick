@@ -127,6 +127,7 @@ const translations: Record<Language, Record<string, string>> = {
 
     // Footer
     "footer.tagline": "Piccolo formato, grande kick. Your daily immunity shot.",
+    "footer.kicklab": "Kick is a project by Kicklab.",
     "footer.company": "Company",
     "footer.our_story": "Our Story",
     "footer.faq": "FAQ",
@@ -316,6 +317,7 @@ const translations: Record<Language, Record<string, string>> = {
 
     // Footer
     "footer.tagline": "Piccolo formato, grande kick. Il tuo shot immunitario quotidiano.",
+    "footer.kicklab": "Kick è un progetto di Kicklab.",
     "footer.company": "Azienda",
     "footer.our_story": "La Nostra Storia",
     "footer.faq": "FAQ",
