@@ -101,11 +101,11 @@ const Callout = ({
         isRight ? "left-full ml-2 sm:ml-8" : "right-full mr-2 sm:mr-8"
       }`}
     >
-      <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-primary flex-shrink-0 mt-0.5" />
+      <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-secondary flex-shrink-0 mt-0.5" />
       <div>
-        <p className="font-bold text-primary text-xs sm:text-base leading-tight sm:whitespace-nowrap mb-0.5">{title}</p>
+        <p className="font-bold text-secondary text-xs sm:text-base leading-tight sm:whitespace-nowrap mb-0.5">{title}</p>
         <p
-          className="text-xs sm:text-base text-primary/80 leading-snug [&_strong]:font-bold [&_strong]:text-primary"
+          className="text-xs sm:text-base text-secondary/80 leading-snug [&_strong]:font-bold [&_strong]:text-secondary"
           dangerouslySetInnerHTML={{ __html: desc }}
         />
       </div>
@@ -126,10 +126,10 @@ const BenefitCallouts = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <span className="text-xs tracking-[0.2em] uppercase text-primary font-semibold mb-4 block">
+          <span className="text-xs tracking-[0.2em] uppercase text-secondary font-semibold mb-4 block">
             {tr({ en: "Why you'll love it", it: "Perché ti piacerà" })}
           </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight text-primary font-sans mb-16 sm:mb-24">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight text-secondary font-sans mb-16 sm:mb-24">
             {language === "en" ? (
               <>Small bottle, <span className="italic">real science</span>.</>
             ) : (
