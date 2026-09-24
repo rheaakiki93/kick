@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import kickLogo from "@/assets/kick-logo.png";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { SHOP_LIVE } from "@/lib/checkout";
 
 const Header = () => {
   const [hidden, setHidden] = useState(false);
@@ -105,12 +106,17 @@ const Header = () => {
 
           {/* Shop */}
           <div className="relative">
-            <a href="/shop" className="text-sm font-medium text-white tracking-wide uppercase relative after:content-[''] after:absolute after:w-full after:h-[1px] after:bg-white after:bottom-0 after:left-0">
+            <a
+              href="/shop"
+              className="inline-flex items-center bg-[#FFCC00] text-secondary text-sm font-bold tracking-wide uppercase px-5 py-2 hover:bg-[#FFCC00]/90 transition-colors"
+            >
               {t("nav.shop")}
             </a>
-            <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[10px] text-white/60 italic font-serif whitespace-nowrap" style={{ fontFamily: 'Georgia, serif' }}>
-              coming soon
-            </span>
+            {!SHOP_LIVE && (
+              <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[10px] text-white/60 italic font-serif whitespace-nowrap" style={{ fontFamily: 'Georgia, serif' }}>
+                {t("nav.coming_soon")}
+              </span>
+            )}
           </div>
         </div>
       </div>

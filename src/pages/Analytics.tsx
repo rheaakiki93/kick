@@ -12,7 +12,9 @@ type Order = {
   name: string;
   email: string;
   phone: string;
+  fulfillment_method: string;
   pickup_location: string | null;
+  address: string | null;
   pickup_date: string | null;
   pickup_time: string | null;
   notes: string | null;
@@ -215,7 +217,7 @@ const Dashboard = ({ onSignOut }: { onSignOut: () => void }) => {
                       <th className="px-4 py-2 font-medium">Name</th>
                       <th className="px-4 py-2 font-medium">Email</th>
                       <th className="px-4 py-2 font-medium">Phone</th>
-                      <th className="px-4 py-2 font-medium">Pickup</th>
+                      <th className="px-4 py-2 font-medium">Fulfillment</th>
                       <th className="px-4 py-2 font-medium">Notes</th>
                     </tr>
                   </thead>
@@ -244,7 +246,11 @@ const Dashboard = ({ onSignOut }: { onSignOut: () => void }) => {
                         <td className="px-4 py-2">{o.email}</td>
                         <td className="px-4 py-2">{o.phone}</td>
                         <td className="px-4 py-2 whitespace-normal max-w-xs">
-                          {o.pickup_location ?? "—"}
+                          <span className={o.fulfillment_method === "delivery" ? "text-amber-400" : ""}>
+                            {o.fulfillment_method === "delivery" ? "Delivery" : "Pickup"}
+                          </span>
+                          {" · "}
+                          {o.fulfillment_method === "delivery" ? (o.address ?? "—") : (o.pickup_location ?? "—")}
                           {o.pickup_date && <span className="text-neutral-400"> · {o.pickup_date}</span>}
                           {o.pickup_time && <span className="text-neutral-400"> · {o.pickup_time}</span>}
                         </td>
